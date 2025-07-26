@@ -5,6 +5,8 @@ import { Card, CardContent, CardHeader, CardTitle } from "./ui/card";
 import { Separator } from "./ui/separator";
 import DevSkills from "./DevSkills";
 import CardFooterComp from "./CardFooterComp";
+import { motion, useAnimation } from "motion/react";
+import { useEffect, useState } from "react";
 
 // const Card = () => {
 //   return (
@@ -29,12 +31,63 @@ type CardCompProps = {
   onClickShare: () => void;
 };
 
-
-
 // const CardComp = ({ onClickShare }: CardCompProps) => {
 const CardComp = () => {
+  const MotionCard = motion.create(Card);
+  const controls = useAnimation();
+  const [show, setShow] = useState(true);
+
+  const onHoverEnd = async () => {
+    await controls.start({
+      scale: 1,
+      transition: { duration: 0.8, ease: "easeInOut" },
+      background: '#FFFFFF',
+    });
+  };
+
+  const sequence = async () => {
+    // Animate out
+    await controls.start({
+      scale: 0,
+      rotate: 360,
+      x: 300,
+      y: -200,
+      transition: { duration: 1, ease: "easeInOut" },
+    });
+
+    setShow(false);
+
+    // Pause before returning
+    await new Promise((r) => setTimeout(r, 1000));
+
+    // Reset card
+    setShow(true);
+    await controls.start({
+      scale: 1,
+      rotate: 0,
+      x: 0,
+      y: 0,
+      transition: { duration: 1, ease: "easeInOut" },
+    });
+  };
+
   return (
-    <Card className="md:w-3/5 lg:w-3/7 xl:w-2/7 w-11/12 gap-2 flex items-center hover:shadow-2xl hover:cursor-pointer hover:scale-105 duration-300 transition-all">
+    <MotionCard
+      animate={controls}
+      initial={{ scale: 1, rotate: 0, x: 0, y: 0, backgroundColor: "white" }}
+      whileHover={{
+        background: [
+          "linear-gradient(135deg, #FF6363 0%, #e2d1c3 100%)",
+          "linear-gradient(135deg, #e0c3fc 0%, #8ec5fc 100%)",
+          "linear-gradient(135deg, #f6d365 0%, #AFC7B6 100%)",
+          "linear-gradient(135deg, #53A96D 0%, #9629E4 100%)",
+        ],
+        transition: { duration: 2, repeat: Infinity, repeatType: "reverse" },
+      }}
+      onClick={sequence}
+      onHoverEnd={onHoverEnd}
+      className="md:w-3/5 lg:w-3/7 xl:w-2/7 w-11/12 inset-0 z-0 bg-white gap-2 flex items-center hover:shadow-2xl hover:cursor-pointer hover:scale-105 duration-300 transition-all"
+    >
       <CardHeader className="w-full flex items-center justify-center">
         <CardTitle className="">Radion</CardTitle>
       </CardHeader>
@@ -48,16 +101,16 @@ const CardComp = () => {
           {/* <div className="flex flex-col gap-1">
                   <p className="text-base font-medium text-blue-600">Experience</p>
                   {data.experience.map(item => <Experience key={item.id} item={item}/>)}
-                </div> */}
+                  </div> */}
           {/* Education */}
           {/* <div className="flex flex-col gap-1">
                   <p className="text-base font-medium text-blue-600">Education</p>
                   {data.education.map(item => <Education key={item.id} item={item}/>)}
-                </div> */}
+                  </div> */}
         </div>
       </CardContent>
       <CardFooterComp socials={data.socials} />
-    </Card>
+    </MotionCard>
   );
 };
 

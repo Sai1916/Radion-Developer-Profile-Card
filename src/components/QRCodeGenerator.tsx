@@ -1,10 +1,9 @@
 "use client";
 
 import { QRCodeCanvas } from "qrcode.react";
-import { motion } from "framer-motion";
+import { motion } from "motion/react";
 import React, { useRef } from "react";
 import { Button } from "./ui/button";
-// import Image from "next/image"
 
 type Props = {
   username: string;
@@ -24,7 +23,8 @@ const QRCodeGenerator = ({
   // const [isLogoLoaded, setIsLogoLoaded] = useState(false);
 
   const qrRef = useRef<HTMLDivElement>(null);
-  const profileUrl = `https://on-radion.com/public/${username}`;
+  // const profileUrl = `https://on-radion.com/public/${username}`;
+  const profileUrl = "https://radion-dev-profile-card.vercel.app/";
 
   const downloadQR = () => {
     const canvas = qrRef.current?.querySelector("canvas");
@@ -59,7 +59,7 @@ const QRCodeGenerator = ({
         initial={{ scale: 0.5, opacity: 0 }}
         animate={{ scale: 1, opacity: 1 }}
         transition={{ duration: 0.5, ease: "easeOut" }}
-        className="relative bg-white p-2 rounded-lg shadow-md"
+        className="relative bg-white p-2 rounded-lg shadow-md flex items-center justify-center"
         style={{ width: size, height: size }}
       >
         <QRCodeCanvas

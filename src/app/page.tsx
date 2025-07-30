@@ -7,7 +7,7 @@ import { QrCode, Share } from "lucide-react";
 import { useState } from "react";
 import sumedhImg from "@/assets/sumedh.jpg";
 import Image from "next/image";
-import { createPassObject } from "@/lib/middleware";
+import { createPassObject, createWalletClass } from "@/lib/middleware";
 import { motion } from "motion/react";
 
 export default function Home() {
@@ -31,6 +31,7 @@ export default function Home() {
   };
 
   const onAddToGoogleWallet = async () => {
+    await createWalletClass();
     const url = await createPassObject();
     window.open(url, "_blank");
   };
